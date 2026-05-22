@@ -23,6 +23,12 @@ body {
     max-width: 450px;
 }
 
+h1::before {
+    content: "✈️ ";
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+
 h2 {
     text-align: center;
     color: #1f2937;
