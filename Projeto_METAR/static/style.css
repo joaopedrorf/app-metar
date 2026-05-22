@@ -1,0 +1,95 @@
+/* ==========================================================================
+   CONFIGURAÇÕES GERAIS E CORES DO SISTEMA
+   ========================================================================== */
+
+/* Reseta margens padrões do navegador e define a fonte padrão corporativa */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f3; /* Cinza claro de fundo, agradável aos olhos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* ==========================================================================
+   O CARD PRINCIPAL (PAINEL)
+   ========================================================================== */
+.painel {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidade */
+    width: 100%;
+    max-width: 450px; /* Impede que o painel estique demais em telas grandes */
+}
+
+/* Título centralizado */
+h2 {
+    text-align: center;
+    color: #1f2937; /* Cinza bem escuro, quase preto (mais elegante que preto puro) */
+    margin-bottom: 25px;
+}
+
+/* ==========================================================================
+   FORMULÁRIOS (CAIXAS DE ENTRADA E SELEÇÃO)
+   ========================================================================== */
+label {
+    font-weight: bold;
+    color: #4b5563; /* Cinza médio para os rótulos */
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Formatação das caixas de texto e dropdowns */
+input[type="text"], select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #d1d5db; /* Borda fina cinza */
+    border-radius: 6px;
+    box-sizing: border-box; /* Garante que o padding não mude a largura total */
+    font-size: 16px;
+}
+
+/* ==========================================================================
+   BOTÃO DE COMANDO
+   ========================================================================== */
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #2563eb; /* Azul profissional (padrão de sistemas modernos) */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s; /* Transição suave na cor ao passar o mouse */
+}
+
+/* Efeito visual quando o mouse passa por cima do botão */
+button:hover {
+    background-color: #1d4ed8; /* Azul um pouco mais escuro */
+}
+
+/* ==========================================================================
+   CAIXAS DE RESULTADO (RESPOSTAS DO SISTEMA)
+   ========================================================================== */
+
+/* Caixa padrão para quando o aeródromo está ABERTO (VFR) */
+.caixa-resultado {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f3f4f6; /* Fundo cinza bem claro */
+    border-left: 5px solid #2563eb; /* Barra lateral azul destacando o bloco */
+}
+
+/* Modificador para quando houver ERRO ou estiver FECHADO (IFR) */
+.erro {
+    background-color: #fef2f2; /* Fundo avermelhado suave indicando atenção */
+    border-left: 5px solid #ef4444; /* Barra lateral vermelha */
+    color: #991b1b; /* Texto vermelho escuro para leitura clara */
+}
