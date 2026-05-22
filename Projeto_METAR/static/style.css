@@ -4,6 +4,7 @@
 
 /* Reseta margens padrões do navegador e define a fonte padrão corporativa */
 body {
+    background-image: url('../imagens/wallpaper002.jpg'); /* Imagem de fundo suave e profissional */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #eef2f3; /* Cinza claro de fundo, agradável aos olhos */
     display: flex;
