@@ -1,5 +1,2 @@
-# Arquivos de ambiente e segredos
 .env
-
-# Pastas nativas do Python (boa prática ignorar também)
 __pycache__/
