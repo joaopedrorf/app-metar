@@ -49,9 +49,9 @@ def index():
 
         # A Regra de Negócio
         if visibilidade >= min_visibilidade and teto >= min_teto:
-            resultado_final = f"OPERAÇÃO VISUAL (VFR) / ABERTO"
+            resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / OPERAÇÃO VISUAL (VFR)"
         else:
-            resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO PARA VFR"
+            resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO VISUAL (VFR)"
 
         # Devolvendo a resposta formatada para a tela HTML
         return render_template('index.html', 
