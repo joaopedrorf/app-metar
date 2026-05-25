@@ -43,11 +43,21 @@ def index():
             resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / OPERAÇÃO VISUAL (VFR)"
         else:
 <<<<<<< HEAD
-            resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO PARA VFR"
+            resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / OPERAÇÃO VISUAL (VFR)"
 =======
             resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO VISUAL (VFR)"
 
-        # Devolvendo a resposta formatada para a tela HTML
+
+>>>>>>> de09117c527f821658be66c5c1c45ce1060d777c
+        return render_template('index.html', 
+                               metar=metar_bruto, 
+                               visibilidade=visibilidade, 
+                               teto=teto, 
+                               resultado=resultado_final)
+    return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 >>>>>>> de09117c527f821658be66c5c1c45ce1060d777c
         return render_template('index.html', 
                                metar=metar_bruto, 
