@@ -97,6 +97,7 @@ def index():
         else:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO VISUAL (VFR)"
 =======
             resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO PARA VFR"
@@ -111,6 +112,9 @@ def index():
 
 >>>>>>> de09117c527f821658be66c5c1c45ce1060d777c
 >>>>>>> parent of ffb60c5 (otimizando)
+=======
+            resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO VISUAL (VFR)"
+>>>>>>> parent of 8c7d5be (Update metar.py)
         return render_template('index.html', 
                                metar=metar_bruto, 
                                visibilidade=visibilidade, 
@@ -129,13 +133,17 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     app.run(debug=True)
+<<<<<<< HEAD
 >>>>>>> de09117c527f821658be66c5c1c45ce1060d777c
 >>>>>>> parent of ffb60c5 (otimizando)
+=======
+>>>>>>> parent of 8c7d5be (Update metar.py)
         return render_template('index.html', 
                                metar=metar_bruto, 
                                visibilidade=visibilidade, 
                                teto=teto, 
                                resultado=resultado_final)
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     return render_template('index.html')
@@ -166,6 +174,8 @@ if __name__ == '__main__':
         status_ifr=status_ifr
     )
 >>>>>>> parent of a211472 (otimizando)
+=======
+>>>>>>> parent of 8c7d5be (Update metar.py)
 
 if __name__ == '__main__':
     app.run(debug=True)
