@@ -17,7 +17,6 @@ MINIMOS_OPERACIONAIS = {
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # Inicializa variáveis vazias para a primeira abertura (GET) limpar a tela
     if request.method != 'POST':
         return render_template('index.html', metar=None, erro=None)
 
@@ -59,19 +58,16 @@ def index():
     teto = dados.get('ceiling', {}).get('feet', 9999) if dados.get('ceiling') else 9999
 
     if visibilidade >= min_visibilidade and teto >= min_teto:
-        status_vfr = "PERMITIDA (Condições VMC acima dos mínimos)"
-        status_ifr = "DISPONÍVEL (Conforme cartas e auxílios do aeródromo)"
+        resultado = "OPERAÇÃO POR INSTRUMENTOS (IFR) / OPERAÇÃO VISUAL (VFR)"
     else:
-        status_vfr = "SUSPENSA (Condições IMC / Abaixo dos mínimos para voo visual)"
-        status_ifr = "DISPONÍVEL (Operações restritas a procedimentos de voo por instrumentos)"
+        resultado = "OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO PARA OPERAÇÃO VISUAL (VFR)"
 
     return render_template(
         'index.html', 
         metar=metar_bruto, 
         visibilidade=visibilidade, 
         teto=teto, 
-        status_vfr=status_vfr,
-        status_ifr=status_ifr,
+        resultado=resultado,
         erro=None
     )
 
