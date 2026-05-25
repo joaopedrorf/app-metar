@@ -7,22 +7,36 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
     <div class="painel">
         <h2>Consulta VFR/IFR</h2>
+        
         <form method="POST">
             <label for="icao">Código ICAO do Aeródromo:</label>
             <input type="text" id="icao" name="icao" placeholder="Ex: SBGL" required maxlength="4" style="text-transform: uppercase;">
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> parent of 4ec4499 (atu)
             <label for="tipo_anv">Categoria da Aeronave:</label>
             <select id="tipo_anv" name="tipo_anv">
                 <option value="1">Asa Fixa (Avião)</option>
                 <option value="2">Asa Rotativa (Helicóptero)</option>
             </select>
+<<<<<<< HEAD
             
             <button type="submit">Processar Condição</button>
         </form>
 
         {% if metar %}
+=======
+
+            <button type="submit">Processar Condição</button>
+        </form>
+
+        {% if resultado %}
+>>>>>>> parent of 4ec4499 (atu)
         <div class="caixa-resultado">
             <p><strong>METAR:</strong> {{ metar }}</p>
             <p><strong>Condição Real:</strong> Visibilidade {{ visibilidade }}m / Teto {{ teto }}ft</p>
@@ -37,6 +51,11 @@
             <p><strong>Atenção:</strong> {{ erro }}</p>
         </div>
         {% endif %}
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 4ec4499 (atu)
     </div>
+
 </body>
 </html>
