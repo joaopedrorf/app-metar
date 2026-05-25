@@ -29,8 +29,7 @@
             <p><strong>METAR:</strong> {{ metar }}</p>
             <p><strong>Condição Real:</strong> Visibilidade {{ visibilidade }}m / Teto {{ teto }}ft</p>
             <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
-            <p style="margin: 5px 0;"><strong>Voo Visual (VFR):</strong> {{ status_vfr }}</p>
-            <p style="margin: 5px 0;"><strong>Voo por Instrumentos (IFR):</strong> {{ status_ifr }}</p>
+            <p style="margin: 5px 0; font-weight: bold; color: #1f2937;">{{ resultado }}</p>
         </div>
         {% endif %}
 
@@ -40,5 +39,6 @@
         </div>
         {% endif %}
     </div>
+
 </body>
 </html>
