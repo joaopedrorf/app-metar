@@ -7,38 +7,26 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
     <div class="painel">
         <h2>Consulta VFR/IFR</h2>
-        
         <form method="POST">
             <label for="icao">Código ICAO do Aeródromo:</label>
             <input type="text" id="icao" name="icao" placeholder="Ex: SBGL" required maxlength="4" style="text-transform: uppercase;">
-
             <label for="tipo_anv">Categoria da Aeronave:</label>
             <select id="tipo_anv" name="tipo_anv">
                 <option value="1">Asa Fixa (Avião)</option>
                 <option value="2">Asa Rotativa (Helicóptero)</option>
             </select>
-
             <button type="submit">Processar Condição</button>
         </form>
-
-        {% if resultado %}
         <div class="caixa-resultado">
             <p><strong>METAR:</strong> {{ metar }}</p>
             <p><strong>Condição Real:</strong> Visibilidade {{ visibilidade }}m / Teto {{ teto }}ft</p>
             <h3 style="color: #1f2937; margin-bottom: 0;">{{ resultado }}</h3>
         </div>
-        {% endif %}
-
-        {% if erro %}
         <div class="caixa-resultado erro">
             <p><strong>Atenção:</strong> {{ erro }}</p>
         </div>
-        {% endif %}
-
     </div>
-
 </body>
 </html>
