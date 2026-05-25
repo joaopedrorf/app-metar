@@ -24,7 +24,7 @@
             <button type="submit">Processar Condição</button>
         </form>
 
-        {% if metar %}
+        {% if metar and metar != None %}
         <div class="caixa-resultado">
             <p><strong>METAR:</strong> {{ metar }}</p>
             <p><strong>Condição Real:</strong> Visibilidade {{ visibilidade }}m / Teto {{ teto }}ft</p>
@@ -34,12 +34,11 @@
         </div>
         {% endif %}
 
-        {% if erro %}
+        {% if erro and erro != None %}
         <div class="caixa-resultado erro">
             <p><strong>Atenção:</strong> {{ erro }}</p>
         </div>
         {% endif %}
     </div>
-
 </body>
 </html>
