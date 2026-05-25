@@ -42,7 +42,13 @@ def index():
         if visibilidade >= min_visibilidade and teto >= min_teto:
             resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / OPERAÇÃO VISUAL (VFR)"
         else:
+<<<<<<< HEAD
+            resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / OPERAÇÃO VISUAL (VFR)"
+=======
             resultado_final = f"OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO VISUAL (VFR)"
+
+
+>>>>>>> de09117c527f821658be66c5c1c45ce1060d777c
         return render_template('index.html', 
                                metar=metar_bruto, 
                                visibilidade=visibilidade, 
@@ -52,11 +58,13 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+>>>>>>> de09117c527f821658be66c5c1c45ce1060d777c
         return render_template('index.html', 
                                metar=metar_bruto, 
                                visibilidade=visibilidade, 
                                teto=teto, 
                                resultado=resultado_final)
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
