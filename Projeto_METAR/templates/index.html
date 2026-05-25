@@ -14,53 +14,31 @@
         <form method="POST">
             <label for="icao">Código ICAO do Aeródromo:</label>
             <input type="text" id="icao" name="icao" placeholder="Ex: SBGL" required maxlength="4" style="text-transform: uppercase;">
-<<<<<<< HEAD
-<<<<<<< HEAD
             
-=======
-
->>>>>>> parent of 4ec4499 (atu)
-=======
->>>>>>> parent of fef2321 (corrigindo bugs)
             <label for="tipo_anv">Categoria da Aeronave:</label>
             <select id="tipo_anv" name="tipo_anv">
                 <option value="1">Asa Fixa (Avião)</option>
                 <option value="2">Asa Rotativa (Helicóptero)</option>
             </select>
-<<<<<<< HEAD
-<<<<<<< HEAD
             
             <button type="submit">Processar Condição</button>
         </form>
 
         {% if metar %}
-=======
-
-            <button type="submit">Processar Condição</button>
-        </form>
-
-        {% if resultado %}
->>>>>>> parent of 4ec4499 (atu)
-=======
-            <button type="submit">Processar Condição</button>
-        </form>
->>>>>>> parent of fef2321 (corrigindo bugs)
         <div class="caixa-resultado">
             <p><strong>METAR:</strong> {{ metar }}</p>
             <p><strong>Condição Real:</strong> Visibilidade {{ visibilidade }}m / Teto {{ teto }}ft</p>
-            <h3 style="color: #1f2937; margin-bottom: 0;">{{ resultado }}</h3>
+            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
+            <p style="margin: 5px 0;"><strong>Voo Visual (VFR):</strong> {{ status_vfr }}</p>
+            <p style="margin: 5px 0;"><strong>Voo por Instrumentos (IFR):</strong> {{ status_ifr }}</p>
         </div>
+        {% endif %}
+
+        {% if erro %}
         <div class="caixa-resultado erro">
             <p><strong>Atenção:</strong> {{ erro }}</p>
         </div>
-<<<<<<< HEAD
         {% endif %}
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 4ec4499 (atu)
-=======
->>>>>>> parent of fef2321 (corrigindo bugs)
     </div>
 
 </body>
