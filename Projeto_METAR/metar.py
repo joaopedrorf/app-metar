@@ -58,9 +58,9 @@ def index():
     teto = dados.get('ceiling', {}).get('feet', 9999) if dados.get('ceiling') else 9999
 
     if visibilidade >= min_visibilidade and teto >= min_teto:
-        resultado = "OPERAÇÃO POR INSTRUMENTOS (IFR) / OPERAÇÃO VISUAL (VFR)"
+        resultado = "OPERANDO POR INSTRUMENTOS (IFR) / OPERANDO VISUAL (VFR)"
     else:
-        resultado = "OPERAÇÃO POR INSTRUMENTOS (IFR) / FECHADO PARA OPERAÇÃO VISUAL (VFR)"
+        resultado = "OPERANDO POR INSTRUMENTOS (IFR)"
 
     return render_template(
         'index.html', 
