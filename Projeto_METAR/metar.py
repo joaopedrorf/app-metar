@@ -11,7 +11,7 @@ API_KEY = os.getenv('API_KEY')
 API_URL = "https://api.checkwx.com/metar/{aeroporto}/decoded"
 
 MINIMOS_OPERACIONAIS = {
-    "2": {"visibilidade": 3000, "teto": 1000},
+    "2": {"visibilidade": 1500, "teto": 600},
     "default": {"visibilidade": 5000, "teto": 1500}
 }
 
