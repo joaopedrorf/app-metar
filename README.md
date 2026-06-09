@@ -8,7 +8,7 @@ Uma aplicação Web internacionalizada construída para decodificar relatórios 
 
 ## 🚀 Live Demo / Demonstração ao Vivo
 👉 **[https://app-metar.onrender.com](https://app-metar.onrender.com)**
-*(Nota: Por estar em um servidor gratuito, o primeiro carregamento pode demorar alguns segundos para iniciar).*
+<br>*(Nota: Por estar em um servidor gratuito, o primeiro carregamento pode demorar alguns segundos para iniciar).*</br>
 
 ---
 
