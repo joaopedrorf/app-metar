@@ -1,15 +1,29 @@
-# ✈️ Painel Meteorológico para Tráfego Aéreo
+# 🌍 METAR Weather Dashboard (Bilingual / Bilíngue)
 
-Aplicação web desenvolvida em Python e Flask para decodificação de mensagens meteorológicas aéreas (METAR) via API REST CheckWX. O sistema analisa em tempo real os parâmetros de visibilidade e teto operacionais de aeródromos mundiais, determinando de forma objetiva a liberação ou suspensão de voos visuais (VFR) e por instrumentos (IFR).
+An internationalized Web Application built to decode raw aeronautical meteorological reports (METAR) in real-time. Features a native toggle between English and Portuguese, rendering complex aviation data into a clean, modern UI.
 
-## 🚀 Funcionalidades
-- **Consulta ICAO Dinâmica:** Processamento e decodificação de dados meteorológicos oficiais de aeródromos.
-- **Mínimos Operacionais Inteligentes:** Aplicação automática de restrições com base no tipo de aeronave (Asa Fixa vs. Asa Rotativa).
-- **Fraseologia de Tráfego Aéreo:** Retorno direto, preciso e padronizado para mitigar erros de interpretação operacional.
-- **Tratamento de Exceções:** Lógica resiliente para lidar com indisponibilidade de API, falhas de conexão ou códigos ICAO inexistentes.
+Uma aplicação Web internacionalizada construída para decodificar relatórios meteorológicos aeronáuticos (METAR) em tempo real com alternância nativa de idioma entre Inglês e Português.
 
-## 🛠️ Tecnologias
-- **Backend:** Python, Flask
-- **Consumo de Dados:** Requests (API REST)
-- **Frontend:** HTML5, CSS3, Jinja2 (Renderização Condicional)
-- **Segurança:** Python-Dotenv (Gerenciamento de Variáveis de Ambiente)
+---
+
+## 🚀 Live Demo / Demonstração ao Vivo
+👉 **[https://app-metar.onrender.com](https://app-metar.onrender.com)**
+*(Nota: Por estar em um servidor gratuito, o primeiro carregamento pode demorar alguns segundos para iniciar).*
+
+---
+
+## 💡 Features / Funcionalidades
+
+- **Real-time Data Fetching:** Integrates with CheckWX API for updated global airport reports.
+- **Internationalization (i18n):** Native language toggle (PT-BR / EN-US) processed in the backend.
+- **Phenomenon Mapping:** Advanced dictionary that maps and translates raw aviation codes (e.g., Heavy Rain to Chuva Forte).
+- **Responsive Grid UI:** Modern layout built with CSS Grid tailored for quick data reading.
+- **Exception Handling:** Resilient logic for API drops, connection failures, or invalid ICAO codes.
+
+---
+
+## 🛠️ Tech Stack / Tecnologias Utilizadas
+
+- **Backend:** Python, Flask, Requests (HTTP Library), Python-Dotenv
+- **Frontend:** HTML5, CSS3 (Pure CSS Grid Layout), Jinja2
+- **Infrastructure:** Gunicorn (WSGI Server), Render (Cloud Hosting & CI/CD)
