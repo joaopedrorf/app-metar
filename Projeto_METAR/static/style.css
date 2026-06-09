@@ -77,3 +77,55 @@ button:hover {
     border-left: 5px solid #ef4444;
     color: #991b1b;
 }
+
+/* --- Estilos adicionais para os dados decodificados --- */
+
+.metar-bruto {
+    background-color: #e5e7eb;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.codigo-metar {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #111827;
+    margin: 5px 0 0 0;
+    word-break: break-all; /* Garante que o METAR longo não quebre o layout */
+}
+
+h3 {
+    color: #374151;
+    font-size: 16px;
+    margin: 15px 0 10px 0;
+}
+
+.grid-dados {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Divide a caixa em duas colunas iguais */
+    gap: 10px; /* Espaçamento entre os cards */
+}
+
+.card-dado {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-dado .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.card-dado .valor {
+    font-size: 15px;
+    font-weight: bold;
+    color: #1f2937;
+}
