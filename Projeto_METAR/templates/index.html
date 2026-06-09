@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ idioma }}">
 <head>
     <meta charset="UTF-8">
     <title>Painel Meteorológico - Tráfego Aéreo</title>
@@ -9,33 +9,87 @@
 <body>
 
     <div class="painel">
-        <h2>Consulta VFR/IFR</h2>
+        <h2>
+            {% if idioma == 'pt' %}Consulta Meteorológica (METAR){% else %}Weather Dashboard (METAR){% endif %}
+        </h2>
         
         <form method="POST">
-            <label for="icao">Código ICAO do Aeródromo:</label>
-            <input type="text" id="icao" name="icao" placeholder="Ex: SBGL" required maxlength="4" style="text-transform: uppercase;">
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-bottom: 15px; font-size: 14px;">
+                <label style="display: inline; font-weight: normal; cursor: pointer;">
+                    <input type="radio" name="idioma" value="pt" {% if idioma == 'pt' %}checked{% endif %} onchange="this.form.submit()"> 🇧🇷 PT
+                </label>
+                <label style="display: inline; font-weight: normal; cursor: pointer;">
+                    <input type="radio" name="idioma" value="en" {% if idioma == 'en' %}checked{% endif %} onchange="this.form.submit()"> 🇺🇸 EN
+                </label>
+            </div>
+
+            <label for="icao">
+                {% if idioma == 'pt' %}Código ICAO do Aeródromo:{% else %}Aerodrome ICAO Code:{% endif %}
+            </label>
+            <input type="text" id="icao" name="icao" placeholder="Ex: SBGL / KJFK" required maxlength="4" style="text-transform: uppercase;">
             
-            <label for="tipo_anv">Categoria da Aeronave:</label>
-            <select id="tipo_anv" name="tipo_anv">
-                <option value="1">Asa Fixa (Avião)</option>
-                <option value="2">Asa Rotativa (Helicóptero)</option>
-            </select>
-            
-            <button type="submit">Processar Condição</button>
+            <button type="submit">
+                {% if idioma == 'pt' %}Consultar METAR{% else %}Fetch METAR{% endif %}
+            </button>
         </form>
 
-        {% if metar and metar != None %}
+        {% if info %}
         <div class="caixa-resultado">
-            <p><strong>METAR:</strong> {{ metar }}</p>
-            <p><strong>Condição Real:</strong> Visibilidade {{ visibilidade }}m / Teto {{ teto }}ft</p>
-            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
-            <p style="margin: 5px 0; font-weight: bold; color: #1f2937;">{{ resultado }}</p>
+            <div class="metar-bruto">
+                <strong>
+                    {% if idioma == 'pt' %}METAR BRUTO:{% else %}RAW METAR:{% endif %}
+                </strong>
+                <p class="codigo-metar">{{ info.bruto }}</p>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
+            
+            <h3>
+                {% if idioma == 'pt' %}Dados Decodificados{% else %}Decoded Data{% endif %}
+            </h3>
+            
+            <div class="grid-dados">
+                <div class="card-dado">
+                    <span class="label">
+                        {% if idioma == 'pt' %}Visibilidade Horizontal{% else %}Horizontal Visibility{% endif %}
+                    </span>
+                    <span class="valor">{{ info.visibilidade }}</span>
+                </div>
+                
+                <div class="card-dado">
+                    <span class="label">
+                        {% if idioma == 'pt' %}Teto (Camadas BKN/OVC){% else %}Ceiling (BKN/OVC Layers){% endif %}
+                    </span>
+                    <span class="valor">{{ info.teto }}</span>
+                </div>
+                
+                <div class="card-dado">
+                    <span class="label">
+                        {% if idioma == 'pt' %}Vento{% else %}Wind{% endif %}
+                    </span>
+                    <span class="valor">{{ info.vento }}</span>
+                </div>
+                
+                <div class="card-dado">
+                    <span class="label">
+                        {% if idioma == 'pt' %}Pressão Atmosférica (QNH){% else %}Altimeter Setting (QNH){% endif %}
+                    </span>
+                    <span class="valor">{{ info.qnh }}</span>
+                </div>
+
+                <div class="card-dado" style="grid-column: span 2;">
+                    <span class="label">
+                        {% if idioma == 'pt' %}Tempo Presente (Fenômenos){% else %}Present Weather (Phenomena){% endif %}
+                    </span>
+                    <span class="valor">{{ info.tempo_presente }}</span>
+                </div>
+            </div>
         </div>
         {% endif %}
 
-        {% if erro and erro != None %}
+        {% if erro %}
         <div class="caixa-resultado erro">
-            <p><strong>Atenção:</strong> {{ erro }}</p>
+            <p><strong>{% if idioma == 'pt' %}Atenção:{% else %}Attention:{% endif %}</strong> {{ erro }}</p>
         </div>
         {% endif %}
     </div>
