@@ -7,23 +7,14 @@ Uma aplicação Web internacionalizada construída para decodificar relatórios 
 ---
 
 ## 🚀 Live Demo / Demonstração ao Vivo
-👉 **[https://app-metar.onrender.com](https://app-metar.onrender.com)**
-<br>*(Nota: Por estar em um servidor gratuito, o primeiro carregamento pode demorar alguns segundos para iniciar).*</br>
+<br>👉 **[https://app-metar.onrender.com](https://app-metar.onrender.com)**</br>
+
+*(Note: Hosted on a free server tier, the initial load may take a few seconds).*
+*(Nota: Por estar em um servidor gratuito, o primeiro carregamento pode demorar alguns segundos).*
 
 ---
 
 ## 💡 Features / Funcionalidades
 
+### 🇺🇸 English
 - **Real-time Data Fetching:** Integrates with CheckWX API for updated global airport reports.
-- **Internationalization (i18n):** Native language toggle (PT-BR / EN-US) processed in the backend.
-- **Phenomenon Mapping:** Advanced dictionary that maps and translates raw aviation codes (e.g., Heavy Rain to Chuva Forte).
-- **Responsive Grid UI:** Modern layout built with CSS Grid tailored for quick data reading.
-- **Exception Handling:** Resilient logic for API drops, connection failures, or invalid ICAO codes.
-
----
-
-## 🛠️ Tech Stack / Tecnologias Utilizadas
-
-- **Backend:** Python, Flask, Requests (HTTP Library), Python-Dotenv
-- **Frontend:** HTML5, CSS3 (Pure CSS Grid Layout), Jinja2
-- **Infrastructure:** Gunicorn (WSGI Server), Render (Cloud Hosting & CI/CD)
