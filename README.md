@@ -1,4 +1,4 @@
-# 🌍 Briefing bilíngue (português/inglês) que mostra METAR e TAF de qualquer aeródromo numa tela só, em linguagem clara.
+# 🌍 Briefing bilíngue (português/inglês) que mostra METAR e TAF de qualquer aeródromo numa tela só, em linguagem clara
 
 An internationalized Web Application built to decode raw aeronautical meteorological reports (METAR) in real-time. Features a native toggle between English and Portuguese, rendering complex aviation data into a clean, modern UI.
 
