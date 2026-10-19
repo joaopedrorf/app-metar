@@ -2,95 +2,140 @@
 <html lang="{{ idioma }}">
 <head>
     <meta charset="UTF-8">
-    <title>Painel Meteorológico - Tráfego Aéreo</title>
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/icons8-avião-100.png') }}"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ t.titulo }} - Tráfego Aéreo</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/icons8-avião-100.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <div class="painel">
-        <h2>
-            {% if idioma == 'pt' %}Consulta Meteorológica (METAR){% else %}Weather Dashboard (METAR){% endif %}
-        </h2>
-        
-        <form method="POST">
-            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-bottom: 15px; font-size: 14px;">
-                <label style="display: inline; font-weight: normal; cursor: pointer;">
+    <div class="painel {% if briefing %}painel-largo{% endif %}">
+        <h2>{{ t.titulo }}</h2>
+
+        <form method="POST" class="formulario">
+            <div class="idiomas">
+                <label>
                     <input type="radio" name="idioma" value="pt" {% if idioma == 'pt' %}checked{% endif %} onchange="this.form.submit()"> 🇧🇷 PT
                 </label>
-                <label style="display: inline; font-weight: normal; cursor: pointer;">
+                <label>
                     <input type="radio" name="idioma" value="en" {% if idioma == 'en' %}checked{% endif %} onchange="this.form.submit()"> 🇺🇸 EN
                 </label>
             </div>
 
-            <label for="icao">
-                {% if idioma == 'pt' %}Código ICAO do Aeródromo:{% else %}Aerodrome ICAO Code:{% endif %}
-            </label>
-            <input type="text" id="icao" name="icao" placeholder="Ex: SBGL / KJFK" required maxlength="4" style="text-transform: uppercase;">
-            
-            <button type="submit">
-                {% if idioma == 'pt' %}Consultar METAR{% else %}Fetch METAR{% endif %}
-            </button>
+            <label for="icao">{{ t.rotulo_icao }}</label>
+            <input type="text" id="icao" name="icao" value="{{ icao or '' }}" placeholder="Ex: SBGL / KJFK" required maxlength="4" style="text-transform: uppercase;">
+
+            <button type="submit">{{ t.botao }}</button>
         </form>
-
-        {% if info %}
-        <div class="caixa-resultado">
-            <div class="metar-bruto">
-                <strong>
-                    {% if idioma == 'pt' %}METAR BRUTO:{% else %}RAW METAR:{% endif %}
-                </strong>
-                <p class="codigo-metar">{{ info.bruto }}</p>
-            </div>
-            
-            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
-            
-            <h3>
-                {% if idioma == 'pt' %}Dados Decodificados{% else %}Decoded Data{% endif %}
-            </h3>
-            
-            <div class="grid-dados">
-                <div class="card-dado">
-                    <span class="label">
-                        {% if idioma == 'pt' %}Visibilidade Horizontal{% else %}Horizontal Visibility{% endif %}
-                    </span>
-                    <span class="valor">{{ info.visibilidade }}</span>
-                </div>
-                
-                <div class="card-dado">
-                    <span class="label">
-                        {% if idioma == 'pt' %}Teto (Camadas BKN/OVC){% else %}Ceiling (BKN/OVC Layers){% endif %}
-                    </span>
-                    <span class="valor">{{ info.teto }}</span>
-                </div>
-                
-                <div class="card-dado">
-                    <span class="label">
-                        {% if idioma == 'pt' %}Vento{% else %}Wind{% endif %}
-                    </span>
-                    <span class="valor">{{ info.vento }}</span>
-                </div>
-                
-                <div class="card-dado">
-                    <span class="label">
-                        {% if idioma == 'pt' %}Pressão Atmosférica (QNH){% else %}Altimeter Setting (QNH){% endif %}
-                    </span>
-                    <span class="valor">{{ info.qnh }}</span>
-                </div>
-
-                <div class="card-dado" style="grid-column: span 2;">
-                    <span class="label">
-                        {% if idioma == 'pt' %}Tempo Presente (Fenômenos){% else %}Present Weather (Phenomena){% endif %}
-                    </span>
-                    <span class="valor">{{ info.tempo_presente }}</span>
-                </div>
-            </div>
-        </div>
-        {% endif %}
 
         {% if erro %}
         <div class="caixa-resultado erro">
-            <p><strong>{% if idioma == 'pt' %}Atenção:{% else %}Attention:{% endif %}</strong> {{ erro }}</p>
+            <p><strong>{{ t.atencao }}</strong> {{ erro }}</p>
         </div>
+        {% endif %}
+
+        {% if briefing %}
+        <p class="cabecalho-briefing">
+            <strong>{{ briefing.aeroporto }}</strong> · {{ t.gerado_em }} {{ briefing.gerado_em }}
+        </p>
+
+        <div class="secoes">
+            {# ---------- METAR ---------- #}
+            <section class="caixa-resultado">
+                <h3 class="titulo-secao">METAR</h3>
+                {% if briefing.metar.erro %}
+                    <p class="erro-secao">{{ briefing.metar.erro }}</p>
+                {% else %}
+                    {% set info = briefing.metar.dados %}
+                    <div class="metar-bruto">
+                        <strong>{{ t.metar_bruto }}</strong>
+                        <p class="codigo-metar">{{ info.bruto }}</p>
+                    </div>
+
+                    <h3>{{ t.decodificado }}</h3>
+                    <div class="grid-dados">
+                        <div class="card-dado">
+                            <span class="label">{{ t.visibilidade }}</span>
+                            <span class="valor">{{ info.visibilidade }}</span>
+                        </div>
+                        <div class="card-dado">
+                            <span class="label">{{ t.teto }}</span>
+                            <span class="valor">{{ info.teto }}</span>
+                        </div>
+                        <div class="card-dado">
+                            <span class="label">{{ t.vento }}</span>
+                            <span class="valor">{{ info.vento }}</span>
+                        </div>
+                        <div class="card-dado">
+                            <span class="label">{{ t.qnh }}</span>
+                            <span class="valor">{{ info.qnh }}</span>
+                        </div>
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.tempo_presente }}</span>
+                            <span class="valor">{{ info.tempo_presente }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+
+            {# ---------- TAF ---------- #}
+            <section class="caixa-resultado">
+                <h3 class="titulo-secao">TAF</h3>
+                {% if briefing.taf.erro %}
+                    <p class="erro-secao">{{ briefing.taf.erro }}</p>
+                {% else %}
+                    {% set taf = briefing.taf.dados %}
+                    <div class="metar-bruto">
+                        <strong>{{ t.taf_bruto }}</strong>
+                        <p class="codigo-metar">{{ taf.bruto }}</p>
+                    </div>
+
+                    <h3>{{ t.periodos }}</h3>
+                    {% for p in taf.periodos %}
+                    <div class="periodo-taf">
+                        <div class="periodo-cabecalho">
+                            <span class="tag">{{ p.mudanca }}</span>
+                            <span>{{ p.inicio }} → {{ p.fim }}</span>
+                        </div>
+                        <dl class="periodo-dados">
+                            <dt>{{ t.vento }}</dt><dd>{{ p.vento }}</dd>
+                            <dt>{{ t.visibilidade_curta }}</dt><dd>{{ p.visibilidade }}</dd>
+                            <dt>{{ t.nuvens }}</dt><dd>{{ p.nuvens }}</dd>
+                            <dt>{{ t.tempo }}</dt><dd>{{ p.tempo }}</dd>
+                        </dl>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </section>
+
+            {# ---------- NOTAM ---------- #}
+            <section class="caixa-resultado secao-larga">
+                <h3 class="titulo-secao">
+                    NOTAM
+                    {% if briefing.notam.dados is not none %}<span class="contador">{{ briefing.notam.dados | length }}</span>{% endif %}
+                </h3>
+                {% if briefing.notam.erro %}
+                    <p class="erro-secao">{{ briefing.notam.erro }}</p>
+                {% elif not briefing.notam.dados %}
+                    <p>{{ t.nenhum_notam }}</p>
+                {% else %}
+                    <div class="lista-notam">
+                    {% for n in briefing.notam.dados %}
+                        <article class="notam">
+                            <div class="periodo-cabecalho">
+                                <span class="tag">{{ n.numero }}</span>
+                                <span>{{ t.inicio }}: {{ n.inicio }} · {{ t.fim }}: {{ n.fim }}</span>
+                            </div>
+                            {% if n.horario %}<p class="notam-horario">{{ n.horario }}</p>{% endif %}
+                            <p class="codigo-metar notam-texto">{{ n.texto }}</p>
+                        </article>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+
+        <p class="aviso-oficial">{{ t.aviso_oficial }}</p>
         {% endif %}
     </div>
 
