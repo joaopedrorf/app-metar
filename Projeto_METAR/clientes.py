@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 import requests
 
 CHECKWX_URL = "https://api.checkwx.com/{tipo}/{aeroporto}/decoded"
-AISWEB_URL = os.getenv('AISWEB_URL', "https://aisweb.decea.mil.br/api/")
+AISWEB_URL = os.getenv('AISWEB_URL', "https://api.decea.mil.br/aisweb/")
 
 TIMEOUT = 10
 
