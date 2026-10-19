@@ -9,9 +9,11 @@ body {
     background-color: #eef2f3;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
+    min-height: 100vh; /* min-height (e não height) deixa a página rolar quando o briefing é longo */
     margin: 0;
+    padding: 30px 12px;
+    box-sizing: border-box;
 }
 
 .painel {
@@ -21,6 +23,11 @@ body {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 450px;
+    box-sizing: border-box;
+}
+
+.painel-largo {
+    max-width: 1100px;
 }
 
 h2 {
@@ -92,7 +99,7 @@ button:hover {
     font-weight: bold;
     color: #111827;
     margin: 5px 0 0 0;
-    word-break: break-all; /* Garante que o METAR longo não quebre o layout */
+    overflow-wrap: anywhere; /* Quebra nos espaços primeiro; só corta grupos se não couber */
 }
 
 h3 {
@@ -128,4 +135,139 @@ h3 {
     font-size: 15px;
     font-weight: bold;
     color: #1f2937;
+}
+
+/* --- Briefing: METAR, TAF e NOTAM --- */
+
+.idiomas {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.idiomas label {
+    display: inline;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.painel-largo .formulario {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.cabecalho-briefing {
+    margin: 25px 0 0 0;
+    color: #4b5563;
+    text-align: center;
+}
+
+.secoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* METAR e TAF lado a lado */
+    gap: 20px;
+}
+
+.secao-larga {
+    grid-column: 1 / -1; /* NOTAM ocupa a largura toda */
+}
+
+.secoes .caixa-resultado {
+    margin-top: 20px;
+}
+
+.titulo-secao {
+    margin-top: 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.contador {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 12px;
+}
+
+.erro-secao {
+    color: #991b1b;
+}
+
+.periodo-taf, .notam {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+}
+
+.periodo-cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.tag {
+    background-color: #e0e7ff;
+    color: #1e3a8a;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+.periodo-dados {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 4px 12px;
+    margin: 8px 0 0 0;
+    font-size: 14px;
+}
+
+.periodo-dados dt {
+    color: #6b7280;
+}
+
+.periodo-dados dd {
+    margin: 0;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.lista-notam {
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+.notam-horario {
+    font-size: 13px;
+    color: #4b5563;
+    margin: 6px 0 0 0;
+}
+
+.notam-texto {
+    font-weight: normal;
+    white-space: pre-wrap;
+    margin-top: 8px;
+}
+
+.aviso-oficial {
+    margin: 20px 0 0 0;
+    font-size: 12px;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* Celular: uma coluna só */
+@media (max-width: 800px) {
+    .secoes {
+        grid-template-columns: 1fr;
+    }
 }
