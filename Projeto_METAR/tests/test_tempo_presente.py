@@ -10,19 +10,19 @@ EN = TEXTOS['en']
 
 @pytest.mark.parametrize("codigo, pt, en", [
     # O caso que apareceu em inglês no site
-    ("VCSH", "Pancadas na vizinhança", "Showers in the vicinity"),
+    ("VCSH", "Pancadas nas vizinhanças", "Showers in the vicinity"),
     # Intensidade (sem sinal = moderada)
-    ("-RA", "Chuva fraca", "Light rain"),
+    ("-RA", "Chuva leve", "Light rain"),
     ("RA", "Chuva moderada", "Moderate rain"),
     ("+RA", "Chuva forte", "Heavy rain"),
-    ("-DZ", "Chuvisco fraco", "Light drizzle"),
-    ("-RADZ", "Chuva fraca e chuvisco", "Light rain and drizzle"),
+    ("-DZ", "Chuvisco leve", "Light drizzle"),
+    ("-RADZ", "Chuva leve e chuvisco", "Light rain and drizzle"),
     # Pancadas e trovoadas
     ("SHRA", "Pancadas de chuva moderada", "Moderate rain showers"),
-    ("-SHRA", "Pancadas de chuva fraca", "Light rain showers"),
+    ("-SHRA", "Pancadas de chuva leve", "Light rain showers"),
     ("+TSRA", "Trovoada com chuva forte", "Thunderstorm with heavy rain"),
     ("TS", "Trovoada", "Thunderstorm"),
-    ("VCTS", "Trovoada na vizinhança", "Thunderstorm in the vicinity"),
+    ("VCTS", "Trovoada nas vizinhanças", "Thunderstorm in the vicinity"),
     ("TSGR", "Trovoada com granizo moderado", "Thunderstorm with moderate hail"),
     # Obscurecimento e descritores
     ("BR", "Névoa úmida", "Mist"),
@@ -33,13 +33,14 @@ EN = TEXTOS['en']
     ("BCFG", "Nevoeiro em bancos", "Patches of fog"),
     ("PRFG", "Nevoeiro parcial", "Partial fog"),
     ("FZFG", "Nevoeiro congelante", "Freezing fog"),
-    ("VCFG", "Nevoeiro na vizinhança", "Fog in the vicinity"),
-    ("-FZDZ", "Chuvisco congelante fraco", "Light freezing drizzle"),
+    ("VCFG", "Nevoeiro nas vizinhanças", "Fog in the vicinity"),
+    ("-FZDZ", "Chuvisco congelante leve", "Light freezing drizzle"),
     ("BLSN", "Neve soprada", "Blowing snow"),
     ("DRSA", "Areia flutuante", "Low drifting sand"),
     # Outros
-    ("SQ", "Tempestade (rajada)", "Squall"),
-    ("+FC", "Nuvem funil (tornado ou tromba d'água)", "Funnel cloud (tornado or waterspout)"),
+    ("SQ", "Tempestade", "Squall"),
+    ("FC", "Nuvem(ns) funil", "Funnel cloud(s)"),
+    ("+FC", "Tornado ou tromba d'água", "Tornado or waterspout"),
     ("NSW", "Sem tempo significativo", "No significant weather"),
 ])
 def test_codigos(codigo, pt, en):
@@ -70,7 +71,7 @@ def test_metar_com_vcsh_fica_em_portugues():
         "conditions": [{"code": "VCSH", "text": "Nearby showers"}],
     }
     info = formatar_metar(dados, 'pt', PT)
-    assert info['tempo_presente'] == "Pancadas na vizinhança"
+    assert info['tempo_presente'] == "Pancadas nas vizinhanças"
     assert info['visibilidade'] == "10 km ou mais"
     assert info['vento'] == "Calmo"
     assert info['qnh'] == "1020 hPa"

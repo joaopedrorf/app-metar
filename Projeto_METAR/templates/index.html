@@ -70,10 +70,44 @@
                             <span class="label">{{ t.qnh }}</span>
                             <span class="valor">{{ info.qnh }}</span>
                         </div>
-                        <div class="card-dado" style="grid-column: span 2;">
+                        <div class="card-dado">
+                            <span class="label">{{ t.temperatura }}</span>
+                            <span class="valor">{{ info.temperatura }}</span>
+                        </div>
+                        <div class="card-dado">
                             <span class="label">{{ t.tempo_presente }}</span>
                             <span class="valor">{{ info.tempo_presente }}</span>
                         </div>
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.nuvens_metar }}</span>
+                            <span class="valor">{{ info.nuvens }}</span>
+                        </div>
+                        {% if info.tempo_recente %}
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.tempo_recente }}</span>
+                            <span class="valor">{{ info.tempo_recente }}</span>
+                        </div>
+                        {% endif %}
+                        {% if info.cortante %}
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.cortante }}</span>
+                            <span class="valor">{{ info.cortante }}</span>
+                        </div>
+                        {% endif %}
+                        {% if info.rvr %}
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.rvr }}</span>
+                            {% for r in info.rvr %}<span class="valor">{{ r }}</span>{% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if info.tendencia %}
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.tendencia }}</span>
+                            {% for td in info.tendencia %}
+                            <span class="valor"><span class="tag">{{ td.rotulo }}</span> {{ td.texto }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             </section>
@@ -88,6 +122,11 @@
                     <div class="metar-bruto">
                         <strong>{{ t.taf_bruto }}</strong>
                         <p class="codigo-metar">{{ taf.bruto }}</p>
+                    </div>
+
+                    <div class="taf-cabecalho">
+                        {% for linha in taf.cabecalho.linhas %}<p>{{ linha }}</p>{% endfor %}
+                        {% if taf.cabecalho.temperaturas %}<p>{{ taf.cabecalho.temperaturas | join(' · ') }}</p>{% endif %}
                     </div>
 
                     <h3>{{ t.periodos }}</h3>
