@@ -6,6 +6,7 @@ Por isso dá para testar cada uma com dados de exemplo (ver tests/).
 import re
 from datetime import datetime
 
+from grupos_metar import ler_grupos
 from tempo_presente import decodificar
 
 # Reserva: tradução pelo texto em inglês, usada só quando a API não manda o código
@@ -130,26 +131,75 @@ def hora_utc(iso):
     return data.strftime('%d/%m %H:%MZ')
 
 
+def formatar_temperatura(dados, t):
+    temperatura = _numero((dados.get('temperature') or {}).get('celsius'))
+    orvalho = _numero((dados.get('dewpoint') or {}).get('celsius'))
+    if temperatura is None:
+        return t['nao_informado']
+    if orvalho is None:
+        return f"{temperatura} °C"
+    return f"{temperatura} °C / {orvalho} °C"
+
+
 def formatar_metar(dados, idioma, t):
+    grupos = ler_grupos(dados['raw_text'])
     teto = (dados.get('ceiling') or {}).get('feet')
     qnh = _numero((dados.get('barometer') or {}).get('hpa'))
-    return {
+
+    vento = formatar_vento(dados.get('wind'), t)
+    if 'variacao_vento' in grupos:
+        vento += t['variacao_fmt'].format(de=grupos['variacao_vento'][0], ate=grupos['variacao_vento'][1])
+
+    visibilidade = formatar_visibilidade(dados.get('visibility'), t)
+    if 'visibilidade_minima' in grupos:
+        metros, direcao = grupos['visibilidade_minima']
+        visibilidade += t['vis_minima_fmt'].format(m=metros, dir=direcao)
+
+    info = {
         "bruto": dados['raw_text'],
-        "visibilidade": formatar_visibilidade(dados.get('visibility'), t),
+        "visibilidade": visibilidade,
         "teto": f"{_numero(teto)} ft" if teto is not None else t['sem_teto'],
-        "vento": formatar_vento(dados.get('wind'), t),
+        "vento": vento,
         "qnh": f"{qnh} hPa" if qnh is not None else "---",
+        "temperatura": formatar_temperatura(dados, t),
+        # Lidas do texto bruto para não perder CB/TCU, que a API pode omitir
+        "nuvens": formatar_nuvens(grupos['nuvens'], t) if grupos['nuvens'] else t['nao_informado'],
         "tempo_presente": traduzir_condicoes(dados.get('conditions'), idioma, t),
+        "tempo_recente": ", ".join(
+            decodificar(c, idioma) or f"RE{c}" for c in grupos['tempo_recente']
+        ),
+        "cortante": ", ".join(
+            t['ws_todas'] if p == 'ALL' else t['ws_pista'].format(pista=p) for p in grupos['cortante']
+        ),
     }
+
+    # Céu obscurecido: a visibilidade vertical (VV) conta como teto
+    if teto is None and 'visibilidade_vertical' in grupos:
+        altura = grupos['visibilidade_vertical']
+        info['teto'] = t['vv_fmt'].format(alt=altura if altura is not None else '///')
+
+    # CAVOK substitui visibilidade, tempo presente e nuvens (ICA 105-16)
+    if grupos['cavok']:
+        info['visibilidade'] = t['cavok_vis']
+        info['teto'] = t['cavok_nuvens']
+        info['tempo_presente'] = t['cavok_tempo']
+        info['nuvens'] = "CAVOK"
+    return info
 
 
 def formatar_nuvens(nuvens, t):
     """[{'code': 'BKN', 'feet': 2000}, {'code': 'FEW', 'feet': 3000, 'type': 'CB'}] -> 'BKN 2000 ft, FEW 3000 ft CB'"""
     camadas = []
     for n in nuvens or []:
-        codigo = n.get('code', '')
-        altura = n.get('feet') or n.get('base_feet_agl')
-        camada = f"{codigo} {altura} ft" if altura else codigo
+        codigo = (n.get('code') or '').upper()
+        altura = _numero(n.get('feet') or n.get('base_feet_agl'))
+        if codigo in t['nuvens_sem_camada']:
+            camadas.append(t['nuvens_sem_camada'][codigo])
+            continue
+        if codigo == 'VV':
+            camadas.append(t['vv_fmt'].format(alt=altura) if altura is not None else t['vv_fmt'].format(alt='///'))
+            continue
+        camada = f"{codigo} {altura} ft" if altura is not None else codigo
         if n.get('type'):
             camada += f" {n['type']}"
         camadas.append(camada.strip())
