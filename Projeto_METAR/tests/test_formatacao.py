@@ -9,11 +9,11 @@ EN = TEXTOS['en']
 def test_metar_em_portugues():
     info = formatar_metar(METAR_SBGL, 'pt', PT)
     assert info['bruto'].startswith("METAR SBGL")
-    assert info['visibilidade'] == "10000 m"
+    assert info['visibilidade'] == "10 km ou mais"  # 9999 ou mais = 10 km ou mais
     assert info['teto'] == "1500 ft"
     assert info['vento'] == "160° com 12 kt, rajadas de 22 kt"
     assert info['qnh'] == "1014 hPa"
-    assert info['tempo_presente'] == "Chuva leve"
+    assert info['tempo_presente'] == "Chuva fraca"  # termo do DECEA para "-"
 
 
 def test_metar_sem_teto_e_sem_fenomenos():
@@ -32,7 +32,7 @@ def test_taf_lista_os_periodos():
     assert tempo['inicio'] == "19/10 21:00Z"
     assert tempo['visibilidade'] == "4000 m"
     assert tempo['nuvens'] == "BKN 1000 ft"
-    assert tempo['tempo'] == "Chuva"
+    assert tempo['tempo'] == "Chuva moderada"  # RA sem sinal = moderada
     assert tempo['vento'] == "—"  # TEMPO sem mudança de vento
 
     assert taf['periodos'][2]['vento'] == "Variável, 3 kt"

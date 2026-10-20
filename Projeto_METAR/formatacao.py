@@ -6,7 +6,9 @@ Por isso dá para testar cada uma com dados de exemplo (ver tests/).
 import re
 from datetime import datetime
 
-# Dicionário abrangente de mapeamento Inglês -> Português para fenômenos do METAR
+from tempo_presente import decodificar
+
+# Reserva: tradução pelo texto em inglês, usada só quando a API não manda o código
 TRADUCAO_FENOMENOS = {
     # Intensidade e Proximidade
     "light": "leve",
@@ -65,23 +67,39 @@ TRADUCAO_FENOMENOS = {
 
 
 def traduzir_condicoes(condicoes, idioma, t):
-    """Lista de fenômenos da API (em inglês) -> texto único no idioma escolhido."""
+    """Lista de fenômenos da API -> texto único no idioma escolhido.
+
+    Usa o código ICAO (ex.: VCSH) para montar a frase. O texto em inglês da
+    API só é usado se o código vier vazio ou for desconhecido.
+    """
     termos = []
     for c in condicoes or []:
-        texto_en = c.get('text', '').lower().strip()
-        if texto_en:
-            if idioma == 'pt':
-                texto_formatado = TRADUCAO_FENOMENOS.get(texto_en, texto_en)
-            else:
-                texto_formatado = texto_en
-            termos.append(texto_formatado.capitalize())
+        texto = decodificar(c.get('code', ''), idioma)
+        if texto is None:
+            texto_en = c.get('text', '').lower().strip()
+            if not texto_en:
+                continue
+            texto = TRADUCAO_FENOMENOS.get(texto_en, texto_en) if idioma == 'pt' else texto_en
+            texto = texto.capitalize()
+        termos.append(texto)
     return ", ".join(termos) if termos else t['sem_fenomenos']
+
+
+def _numero(valor):
+    """'9999.0', 9999.0 ou '9999' -> 9999 (int). Devolve None se não for número."""
+    try:
+        numero = float(valor)
+    except (TypeError, ValueError):
+        return None
+    return int(numero) if numero == int(numero) else numero
 
 
 def formatar_vento(vento, t):
     vento = vento or {}
-    velocidade = vento.get('speed_kts', 0)
-    direcao = vento.get('degrees')
+    velocidade = _numero(vento.get('speed_kts')) or 0
+    direcao = _numero(vento.get('degrees'))
+    if velocidade == 0:
+        return t['vento_calmo']
     if direcao is None:
         texto = f"{t['vento_variavel']}, {velocidade} kt"
     else:
@@ -92,8 +110,13 @@ def formatar_vento(vento, t):
 
 
 def formatar_visibilidade(visibilidade, t):
-    metros = (visibilidade or {}).get('meters')
-    return f"{metros} m" if metros is not None else t['vis_ampla']
+    metros = _numero((visibilidade or {}).get('meters'))
+    if metros is None:
+        return t['vis_ampla']
+    # No METAR, 9999 significa "10 km ou mais"
+    if metros >= 9999:
+        return t['vis_10km']
+    return f"{metros} m"
 
 
 def hora_utc(iso):
@@ -109,11 +132,11 @@ def hora_utc(iso):
 
 def formatar_metar(dados, idioma, t):
     teto = (dados.get('ceiling') or {}).get('feet')
-    qnh = (dados.get('barometer') or {}).get('hpa')
+    qnh = _numero((dados.get('barometer') or {}).get('hpa'))
     return {
         "bruto": dados['raw_text'],
         "visibilidade": formatar_visibilidade(dados.get('visibility'), t),
-        "teto": f"{teto} ft" if teto is not None else t['sem_teto'],
+        "teto": f"{_numero(teto)} ft" if teto is not None else t['sem_teto'],
         "vento": formatar_vento(dados.get('wind'), t),
         "qnh": f"{qnh} hPa" if qnh is not None else "---",
         "tempo_presente": traduzir_condicoes(dados.get('conditions'), idioma, t),
