@@ -94,6 +94,20 @@
                             <span class="valor">{{ info.cortante }}</span>
                         </div>
                         {% endif %}
+                        {% if info.rvr %}
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.rvr }}</span>
+                            {% for r in info.rvr %}<span class="valor">{{ r }}</span>{% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if info.tendencia %}
+                        <div class="card-dado" style="grid-column: span 2;">
+                            <span class="label">{{ t.tendencia }}</span>
+                            {% for td in info.tendencia %}
+                            <span class="valor"><span class="tag">{{ td.rotulo }}</span> {{ td.texto }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             </section>
