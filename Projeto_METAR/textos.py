@@ -37,6 +37,8 @@ TEXTOS = {
 
         # Valores formatados
         'vis_ampla': "Não informada / Ampla",
+        'vis_10km': "10 km ou mais",
+        'vento_calmo': "Calmo",
         'sem_teto': "Céu Claro (Sem Teto)",
         'vento_fmt': "{dir}° com {vel} kt",
         'rajada_fmt': ", rajadas de {raj} kt",
@@ -89,6 +91,8 @@ TEXTOS = {
         'fim': "To",
 
         'vis_ampla': "Not reported / Wide",
+        'vis_10km': "10 km or more",
+        'vento_calmo': "Calm",
         'sem_teto': "Clear Sky (No Ceiling)",
         'vento_fmt': "{dir}° at {vel} kt",
         'rajada_fmt': ", gusting {raj} kt",
