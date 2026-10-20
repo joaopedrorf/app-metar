@@ -6,9 +6,11 @@ qualquer combinação válida sai traduzida, mesmo que nunca tenha aparecido ant
 
 Um código tem até quatro partes, nesta ordem:
     intensidade (- ou +)  ·  proximidade (VC)  ·  descritor (SH, TS...)  ·  fenômeno(s) (RA, FG...)
-Exemplo: -SHRA = fraca + pancadas + chuva -> "Pancadas de chuva fraca".
+Exemplo: -SHRA = leve + pancadas + chuva -> "Pancadas de chuva leve".
 
-Terminologia em português conforme o DECEA/ANAC (ex.: VCSH = "pancadas na vizinhança").
+Terminologia em português conforme a tabela de tempo presente do DECEA
+("Como decodificar o METAR e o SPECI", Central de Ajuda do DECEA / ICA 105-16):
+"-" = leve, sem sinal = moderada, "+" = forte, VC = nas vizinhanças.
 """
 
 # Fenômenos: código -> (português, gênero), inglês
@@ -22,7 +24,7 @@ FENOMENOS = {
     'IC': (('cristais de gelo', 'mp'), 'ice crystals'),
     'PL': (('pelotas de gelo', 'fp'), 'ice pellets'),
     'GR': (('granizo', 'm'), 'hail'),
-    'GS': (('granizo pequeno', 'm'), 'small hail'),
+    'GS': (('granizo pequeno e/ou grãos de neve', 'm'), 'small hail and/or snow pellets'),
     'UP': (('precipitação desconhecida', 'f'), 'unknown precipitation'),
     # Obscurecimento
     'BR': (('névoa úmida', 'f'), 'mist'),
@@ -33,9 +35,9 @@ FENOMENOS = {
     'SA': (('areia', 'f'), 'sand'),
     'HZ': (('névoa seca', 'f'), 'haze'),
     # Outros
-    'PO': (('redemoinhos de poeira/areia', 'mp'), 'dust/sand whirls'),
-    'SQ': (('tempestade (rajada)', 'f'), 'squall'),
-    'FC': (('nuvem funil (tornado ou tromba d\'água)', 'f'), 'funnel cloud (tornado or waterspout)'),
+    'PO': (('poeira/areia em redemoinhos', 'f'), 'dust/sand whirls'),
+    'SQ': (('tempestade', 'f'), 'squall'),
+    'FC': (('nuvem(ns) funil', 'f'), 'funnel cloud(s)'),
     'SS': (('tempestade de areia', 'f'), 'sandstorm'),
     'DS': (('tempestade de poeira', 'f'), 'duststorm'),
 }
@@ -59,7 +61,7 @@ ADJETIVOS = {
 DESCRITORES = set(ADJETIVOS) | {'SH', 'TS'}
 
 INTENSIDADE_PT = {
-    '-': ('fraco', 'fraca', 'fracos', 'fracas'),
+    '-': ('leve', 'leve', 'leves', 'leves'),
     '+': ('forte', 'forte', 'fortes', 'fortes'),
     '': ('moderado', 'moderada', 'moderados', 'moderadas'),
 }
@@ -67,6 +69,8 @@ INTENSIDADE_EN = {'-': 'light', '+': 'heavy', '': 'moderate'}
 
 ESPECIAIS = {
     'NSW': {'pt': "Sem tempo significativo", 'en': "No significant weather"},
+    # +FC é como o METAR indica tornado ou tromba d'água
+    '+FC': {'pt': "Tornado ou tromba d'água", 'en': "Tornado or waterspout"},
 }
 
 
@@ -128,7 +132,7 @@ def _texto_pt(intensidade, vizinhanca, descritor, fenomenos):
         texto = fenomeno
 
     if vizinhanca:
-        texto += " na vizinhança"
+        texto += " nas vizinhanças"
     return texto
 
 

@@ -13,15 +13,23 @@ def test_metar_em_portugues():
     assert info['teto'] == "1500 ft"
     assert info['vento'] == "160° com 12 kt, rajadas de 22 kt"
     assert info['qnh'] == "1014 hPa"
-    assert info['tempo_presente'] == "Chuva fraca"  # termo do DECEA para "-"
+    assert info['tempo_presente'] == "Chuva leve"  # termo do DECEA para "-"
 
 
 def test_metar_sem_teto_e_sem_fenomenos():
-    dados = {"raw_text": "METAR SBGL 191800Z 00000KT CAVOK 25/15 Q1015", "wind": {"degrees": 0, "speed_kts": 0}}
+    dados = {"raw_text": "METAR SBGL 191800Z 00000KT 9999 FEW030 25/15 Q1015", "wind": {"degrees": 0, "speed_kts": 0}}
     info = formatar_metar(dados, 'en', EN)
     assert info['teto'] == "Clear Sky (No Ceiling)"
     assert info['tempo_presente'] == "No significant phenomena"
     assert info['qnh'] == "---"
+
+
+def test_metar_cavok():
+    dados = {"raw_text": "METAR SBGL 191800Z 00000KT CAVOK 25/15 Q1015", "wind": {"speed_kts": 0}}
+    info = formatar_metar(dados, 'pt', PT)
+    assert info['visibilidade'] == "10 km ou mais (CAVOK)"
+    assert info['tempo_presente'] == "Nenhum tempo significativo (CAVOK)"
+    assert "5000 ft" in info['teto']
 
 
 def test_taf_lista_os_periodos():
