@@ -110,6 +110,11 @@
                         <p class="codigo-metar">{{ taf.bruto }}</p>
                     </div>
 
+                    <div class="taf-cabecalho">
+                        {% for linha in taf.cabecalho.linhas %}<p>{{ linha }}</p>{% endfor %}
+                        {% if taf.cabecalho.temperaturas %}<p>{{ taf.cabecalho.temperaturas | join(' · ') }}</p>{% endif %}
+                    </div>
+
                     <h3>{{ t.periodos }}</h3>
                     {% for p in taf.periodos %}
                     <div class="periodo-taf">

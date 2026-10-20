@@ -271,3 +271,9 @@ h3 {
         grid-template-columns: 1fr;
     }
 }
+
+.taf-cabecalho p {
+    margin: 0 0 4px 0;
+    font-size: 13px;
+    color: #374151;
+}
