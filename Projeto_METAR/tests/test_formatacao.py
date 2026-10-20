@@ -34,7 +34,7 @@ def test_metar_cavok():
 
 def test_taf_lista_os_periodos():
     taf = formatar_taf(TAF_SBGL, 'pt', PT)
-    assert [p['mudanca'] for p in taf['periodos']] == ["Previsão base", "TEMPO", "BECMG"]
+    assert [p['mudanca'] for p in taf['periodos']] == ["Previsão base 1918/2024", "TEMPO 1921/2001", "BECMG 2006/2008"]
 
     tempo = taf['periodos'][1]
     assert tempo['inicio'] == "19/10 21:00Z"

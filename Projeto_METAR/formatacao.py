@@ -7,6 +7,7 @@ import re
 from datetime import datetime
 
 from grupos_metar import ler_grupos
+from grupos_taf import ler_taf
 from tempo_presente import decodificar
 
 # Reserva: tradução pelo texto em inglês, usada só quando a API não manda o código
@@ -206,18 +207,52 @@ def formatar_nuvens(nuvens, t):
     return ", ".join(c for c in camadas if c) or t['nao_informado']
 
 
+def _dia_hora(ddhh, t):
+    """'2018' -> 'dia 20 às 18Z'; '201300' (FM) -> 'dia 20 às 13:00Z'"""
+    if len(ddhh) == 6:
+        return t['dia_hora_min_fmt'].format(dia=ddhh[:2], hora=ddhh[2:4], min=ddhh[4:])
+    return t['dia_hora_fmt'].format(dia=ddhh[:2], hora=ddhh[2:4])
+
+
+def formatar_cabecalho_taf(taf, t):
+    """Emissão, validade, AMD/COR e temperaturas máx./mín. (TX/TN) do TAF."""
+    partes = []
+    if taf['amd']:
+        partes.append(t['taf_amd'])
+    if taf['cor']:
+        partes.append(t['taf_cor'])
+    if taf['emitido']:
+        partes.append(t['taf_emitido'].format(quando=_dia_hora(taf['emitido'][:6], t)))
+    if taf['validade']:
+        inicio, fim = taf['validade'].split('/')
+        partes.append(t['taf_validade'].format(codigo=taf['validade'], de=_dia_hora(inicio, t), ate=_dia_hora(fim, t)))
+    temperaturas = [t['taf_tx'].format(temp=v, quando=_dia_hora(h, t)) for v, h in taf['tx']]
+    temperaturas += [t['taf_tn'].format(temp=v, quando=_dia_hora(h, t)) for v, h in taf['tn']]
+    return {"linhas": partes, "temperaturas": temperaturas}
+
+
 def formatar_taf(dados, idioma, t):
+    taf = ler_taf(dados['raw_text'])
+    previsoes = dados.get('forecast', [])
+    # Só usa os rótulos do texto bruto se os períodos baterem com os da API
+    if taf['validade'] and len(taf['periodos']) == len(previsoes):
+        brutos = taf['periodos']
+    else:
+        brutos = [None] * len(previsoes)
+
     periodos = []
-    for previsao in dados.get('forecast', []):
+    for previsao, bruto in zip(previsoes, brutos):
         indicador = ((previsao.get('change') or {}).get('indicator') or {}).get('code')
         probabilidade = (previsao.get('change') or {}).get('probability')
-        if indicador and probabilidade:
+        if bruto is not None:
+            mudanca = f"{t['base']} {bruto['rotulo']}" if bruto['tipo'] is None else bruto['rotulo']
+        elif indicador and probabilidade:
             mudanca = f"PROB{probabilidade} {indicador}" if indicador != 'PROB' else f"PROB{probabilidade}"
         else:
             mudanca = indicador or t['base']
 
         horario = previsao.get('timestamp') or {}
-        periodos.append({
+        periodo = {
             "mudanca": mudanca,
             "inicio": hora_utc(horario.get('from')),
             "fim": hora_utc(horario.get('to')),
@@ -225,8 +260,18 @@ def formatar_taf(dados, idioma, t):
             "visibilidade": formatar_visibilidade(previsao.get('visibility'), t) if previsao.get('visibility') else t['nao_informado'],
             "nuvens": formatar_nuvens(previsao.get('clouds'), t),
             "tempo": traduzir_condicoes(previsao.get('conditions'), idioma, t) if previsao.get('conditions') else t['nao_informado'],
-        })
-    return {"bruto": dados['raw_text'], "periodos": periodos}
+        }
+        if bruto is not None:
+            # Nuvens lidas do texto para não perder CB/TCU
+            nuvens = ler_grupos(' '.join(bruto['grupos']))['nuvens']
+            if nuvens:
+                periodo['nuvens'] = formatar_nuvens(nuvens, t)
+            if bruto['cavok']:
+                periodo['visibilidade'] = t['cavok_vis']
+                periodo['nuvens'] = t['cavok_nuvens']
+                periodo['tempo'] = t['cavok_tempo']
+        periodos.append(periodo)
+    return {"bruto": dados['raw_text'], "periodos": periodos, "cabecalho": formatar_cabecalho_taf(taf, t)}
 
 
 def data_notam(valor, t):
