@@ -61,3 +61,26 @@ def test_ceu_obscurecido_vira_teto():
 def test_nuvens_do_metar_mantem_cb():
     dados = {"raw_text": "METAR SBGL 201200Z 31015KT 9999 BKN010 FEW030CB SCT040TCU 18/16 Q1012", "ceiling": {"feet": 1000}}
     assert formatar_metar(dados, 'pt', PT)['nuvens'] == "BKN 1000 ft, FEW 3000 ft CB, SCT 4000 ft TCU"
+
+
+def test_rvr_e_tendencia():
+    dados = {
+        "raw_text": "METAR SBGL 201200Z 18005KT 0600 R10/0800V1200U R28L/M0050 FG VV002 12/12 Q1015 "
+                    "TEMPO FM1300 TL1400 3000 BR BKN010 RMK TESTE",
+        "wind": {"degrees": 180, "speed_kts": 5},
+    }
+    info = formatar_metar(dados, 'pt', PT)
+    assert info['rvr'] == ["Pista 10: entre 800 m e 1200 m, aumentando", "Pista 28L: menos de 50 m"]
+    assert info['tendencia'] == [{
+        "rotulo": "TEMPO FM1300 TL1400",
+        "texto": "a partir das 13:00Z, até 14:00Z: 3000 m, Névoa úmida, BKN 1000 ft",
+    }]
+    assert formatar_metar(dados, 'en', EN)['rvr'][1] == "Runway 28L: less than 50 m"
+
+
+def test_tendencia_nosig_e_sem_tendencia():
+    nosig = formatar_metar({"raw_text": "METAR SBGL 201200Z 18005KT CAVOK 25/12 Q1015 NOSIG"}, 'pt', PT)
+    assert nosig['tendencia'] == [{"rotulo": "NOSIG", "texto": "Sem mudança significativa prevista (NOSIG)"}]
+    assert nosig['rvr'] == []
+    sem = formatar_metar({"raw_text": "METAR SBGL 201200Z 18005KT CAVOK 25/12 Q1015"}, 'pt', PT)
+    assert sem['tendencia'] == []

@@ -29,7 +29,7 @@ Uma aplicação Web internacionalizada construída para decodificar relatórios 
 - **Phenomenon Mapping:** Advanced dictionary that maps and translates raw aviation codes.
 - **Responsive Grid UI:** Modern layout built with CSS Grid tailored for quick data reading.
 - **Exception Handling:** Resilient logic for API drops, connection failures, or invalid ICAO codes.
-- **METAR + TAF:** Current weather report and aerodrome forecast decoded side by side, with each TAF period (TEMPO, BECMG, PROB) broken out.
+- **METAR + TAF:** Current weather report and aerodrome forecast decoded side by side, following ICAO Annex 3 and DECEA's ICA 105-16. The METAR card covers CAVOK, wind variation, minimum visibility, RVR, all cloud layers with CB/TCU, recent weather, wind shear and the 2-hour trend. Each TAF period shows its change group and validity as written (e.g. `BECMG 2013/2015`, `PROB30 TEMPO 2018/2022`), plus issue time, validity and max/min temperatures (TX/TN).
 - **NOTAMs in force:** Brazilian aerodromes, from DECEA's official AISWEB API.
 - **Fault isolation:** The three sources are fetched in parallel; if one fails, the others still show.
 - **Automated tests:** pytest suite with sample API responses.
@@ -40,7 +40,7 @@ Uma aplicação Web internacionalizada construída para decodificar relatórios 
 - **Mapeamento de Fenômenos:** Dicionário avançado que mapeia e traduz códigos meteorológicos operacionais.
 - **Interface Responsiva:** Layout moderno em CSS Grid feito para uma leitura rápida dos dados.
 - **Tratamento de Exceções:** Lógica resiliente para quedas de API, falhas de conexão ou ICAO inválido.
-- **METAR + TAF:** Boletim atual e previsão do aeródromo decodificados lado a lado, com cada período do TAF (TEMPO, BECMG, PROB) separado.
+- **METAR + TAF:** Boletim atual e previsão do aeródromo decodificados lado a lado, seguindo o Anexo 3 da ICAO e a ICA 105-16 do DECEA. O METAR mostra CAVOK, variação do vento, visibilidade mínima, RVR, todas as camadas de nuvens com CB/TCU, tempo recente, cortante do vento e a tendência para 2 horas. Cada período do TAF mostra o grupo de mudança e a validade como estão na mensagem (ex.: `BECMG 2013/2015`, `PROB30 TEMPO 2018/2022`), além de emissão, validade e temperaturas máxima e mínima (TX/TN).
 - **NOTAM em vigor:** Aeródromos brasileiros, pela API oficial do AISWEB/DECEA.
 - **Falhas isoladas:** As três fontes são consultadas em paralelo; se uma cair, as outras continuam aparecendo.
 - **Testes automatizados:** Suíte pytest com respostas de exemplo das APIs.

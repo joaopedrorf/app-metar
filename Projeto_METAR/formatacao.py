@@ -6,7 +6,7 @@ Por isso dá para testar cada uma com dados de exemplo (ver tests/).
 import re
 from datetime import datetime
 
-from grupos_metar import ler_grupos
+from grupos_metar import ler_grupos, ler_tendencia
 from grupos_taf import ler_taf
 from tempo_presente import decodificar
 
@@ -172,6 +172,8 @@ def formatar_metar(dados, idioma, t):
         "cortante": ", ".join(
             t['ws_todas'] if p == 'ALL' else t['ws_pista'].format(pista=p) for p in grupos['cortante']
         ),
+        "rvr": [formatar_rvr(r, t) for r in grupos['rvr']],
+        "tendencia": [formatar_tendencia(td, idioma, t) for td in ler_tendencia(dados['raw_text'])],
     }
 
     # Céu obscurecido: a visibilidade vertical (VV) conta como teto
@@ -186,6 +188,60 @@ def formatar_metar(dados, idioma, t):
         info['tempo_presente'] = t['cavok_tempo']
         info['nuvens'] = "CAVOK"
     return info
+
+
+def _metros_rvr(valor, t):
+    """'1200' -> '1200 m', 'M0050' -> 'menos de 50 m', 'P2000' -> 'mais de 2000 m'"""
+    metros = int(valor.lstrip('MP'))
+    if valor.startswith('M'):
+        return t['rvr_menor'].format(m=metros)
+    if valor.startswith('P'):
+        return t['rvr_maior'].format(m=metros)
+    return f"{metros} m"
+
+
+def formatar_rvr(rvr, t):
+    """{'pista': '10', 'valor': '0800', 'ate': '1200', 'tendencia': 'U'} -> 'Pista 10: entre 800 m e 1200 m, aumentando'"""
+    valor = _metros_rvr(rvr['valor'], t)
+    if rvr['ate']:
+        valor = t['rvr_variando'].format(de=valor, ate=_metros_rvr(rvr['ate'], t))
+    if rvr['tendencia']:
+        valor += f", {t['rvr_tendencia'][rvr['tendencia']]}"
+    return t['rvr_pista'].format(pista=rvr['pista'], valor=valor)
+
+
+def formatar_tendencia(tendencia, idioma, t):
+    """Tendência do METAR -> {'rotulo': 'TEMPO FM1300 TL1400', 'texto': 'a partir das 13:00Z, até 14:00Z: 3000 m, Chuva moderada, BKN 1000 ft'}"""
+    rotulo = ' '.join([tendencia['tipo']] + tendencia['horarios'])
+    if tendencia['tipo'] == 'NOSIG':
+        return {"rotulo": rotulo, "texto": t['nosig']}
+
+    partes = []
+    for g in tendencia['grupos']:
+        vento = re.fullmatch(r'(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT', g)
+        if vento:
+            partes.append(formatar_vento({
+                'degrees': None if vento[1] == 'VRB' else int(vento[1]),
+                'speed_kts': int(vento[2]),
+                'gust_kts': int(vento[3]) if vento[3] else None,
+            }, t))
+        elif g == 'CAVOK':
+            partes += [t['cavok_vis'], t['cavok_tempo']]
+        elif re.fullmatch(r'\d{4}', g):
+            partes.append(formatar_visibilidade({'meters': g}, t))
+        else:
+            texto = decodificar(g, idioma)
+            if texto:
+                partes.append(texto)
+    nuvens = ler_grupos(' '.join(tendencia['grupos']))['nuvens']
+    if nuvens:
+        partes.append(formatar_nuvens(nuvens, t))
+
+    horarios = [t['tend_horario'][h[:2]].format(h=f"{h[2:4]}:{h[4:]}") for h in tendencia['horarios']]
+    texto = ", ".join(partes)
+    if horarios:
+        texto = f"{', '.join(horarios)}: {texto}" if texto else ', '.join(horarios)
+    return {"rotulo": rotulo, "texto": texto}
 
 
 def formatar_nuvens(nuvens, t):
