@@ -65,3 +65,10 @@ def test_aerodromo_sem_taf(cliente, fontes_ok, monkeypatch):
     html = cliente.post('/', data={"icao": "SBGL", "idioma": "en"}).get_data(as_text=True)
     assert "METAR SBGL 191800Z" in html
     assert "No data found for this aerodrome." in html
+
+
+def test_previa_para_linkedin(cliente):
+    html = cliente.get('/').get_data(as_text=True)
+    assert 'property="og:title"' in html
+    assert 'content="https://localhost/static/imagens/previa.png"' in html
+    assert cliente.get('/static/imagens/previa.png').status_code == 200
