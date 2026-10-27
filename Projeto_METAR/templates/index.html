@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ t.titulo }} - Tráfego Aéreo</title>
+    {# Prévia do link no LinkedIn, WhatsApp etc. (Open Graph). A imagem precisa de endereço completo com https #}
+    <meta name="description" content="METAR, TAF e NOTAM de um aeródromo numa tela só, em português e inglês. METAR, TAF and NOTAM for an aerodrome on one screen, in Portuguese and English.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Briefing Meteorológico · Weather Briefing (METAR, TAF, NOTAM)">
+    <meta property="og:description" content="METAR, TAF e NOTAM de um aeródromo numa tela só, em português e inglês. METAR, TAF and NOTAM for an aerodrome on one screen, in Portuguese and English.">
+    <meta property="og:url" content="{{ url_for('index', _external=True, _scheme='https') }}">
+    <meta property="og:image" content="{{ url_for('static', filename='imagens/previa.png', _external=True, _scheme='https') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/icons8-avião-100.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
