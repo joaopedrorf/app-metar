@@ -20,6 +20,7 @@ TEXTOS = {
         'frescor_metar_velho': "Mais de 1 h: confira se já saiu um METAR mais novo.",
         'frescor_taf_vencido': "Validade terminou às {hora}.",
         'aviso_oficial': "Uso informativo. Não substitui o briefing oficial do DECEA (AISWEB/REDEMET).",
+        'rodape_autor': "Projeto de portfólio · Fale com o desenvolvedor no",
 
         'metar_bruto': "METAR BRUTO:",
         'decodificado': "Dados Decodificados",
@@ -119,6 +120,7 @@ TEXTOS = {
         'frescor_metar_velho': "Over 1 h old: check whether a newer METAR is out.",
         'frescor_taf_vencido': "Validity ended at {hora}.",
         'aviso_oficial': "For information only. Not a substitute for an official briefing.",
+        'rodape_autor': "Portfolio project · Contact the developer on",
 
         'metar_bruto': "RAW METAR:",
         'decodificado': "Decoded Data",

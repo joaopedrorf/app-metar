@@ -115,3 +115,11 @@ def test_selo_mostra_hora_da_falha(cliente, fontes_ok, relogio, monkeypatch):
     assert "Falhou às 18:25Z" in html
     # As outras seções continuam com o selo normal
     assert "Observado às 18:00Z" in html
+
+
+def test_rodape_com_link_do_linkedin(cliente):
+    html = cliente.get('/').get_data(as_text=True)
+    assert "linkedin.com/in/" in html
+    assert "Fale com o desenvolvedor" in html
+    html = cliente.post('/', data={"icao": "", "idioma": "en"}).get_data(as_text=True)
+    assert "Contact the developer" in html
