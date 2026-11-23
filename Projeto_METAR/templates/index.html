@@ -18,6 +18,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    {# Selo de frescor: de quando é o dado. Verde = recente, amarelo = velho, vermelho = falhou #}
+    {% macro selo_frescor(secao) %}
+        {% if secao.selo %}
+        <div class="selo-frescor selo-{{ secao.selo.estado }}">
+            <span class="selo-texto">{{ secao.selo.texto }}</span>
+            {% if secao.selo.aviso %}<span class="selo-aviso">{{ secao.selo.aviso }}</span>{% endif %}
+        </div>
+        {% endif %}
+    {% endmacro %}
 
     <div class="painel {% if briefing %}painel-largo{% endif %}">
         <h2>{{ t.titulo }}</h2>
@@ -53,6 +62,7 @@
             {# ---------- METAR ---------- #}
             <section class="caixa-resultado">
                 <h3 class="titulo-secao">METAR</h3>
+                {{ selo_frescor(briefing.metar) }}
                 {% if briefing.metar.erro %}
                     <p class="erro-secao">{{ briefing.metar.erro }}</p>
                 {% else %}
@@ -125,6 +135,7 @@
             {# ---------- TAF ---------- #}
             <section class="caixa-resultado">
                 <h3 class="titulo-secao">TAF</h3>
+                {{ selo_frescor(briefing.taf) }}
                 {% if briefing.taf.erro %}
                     <p class="erro-secao">{{ briefing.taf.erro }}</p>
                 {% else %}
@@ -163,6 +174,7 @@
                     NOTAM
                     {% if briefing.notam.dados is not none %}<span class="contador">{{ briefing.notam.dados | length }}</span>{% endif %}
                 </h3>
+                {{ selo_frescor(briefing.notam) }}
                 {% if briefing.notam.erro %}
                     <p class="erro-secao">{{ briefing.notam.erro }}</p>
                 {% elif not briefing.notam.dados %}

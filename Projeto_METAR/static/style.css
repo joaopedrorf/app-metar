@@ -277,3 +277,38 @@ h3 {
     font-size: 13px;
     color: #374151;
 }
+
+/* --- Selo de frescor: de quando é o dado de cada seção --- */
+.selo-frescor {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+    margin: -4px 0 12px 0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border-left: 4px solid;
+    font-size: 13px;
+}
+
+.selo-texto {
+    font-weight: bold;
+}
+
+.selo-ok {
+    background-color: #ecfdf5;
+    border-color: #059669;
+    color: #065f46;
+}
+
+.selo-velho {
+    background-color: #fffbeb;
+    border-color: #d97706;
+    color: #92400e;
+}
+
+.selo-falha {
+    background-color: #fef2f2;
+    border-color: #dc2626;
+    color: #991b1b;
+}
