@@ -32,6 +32,7 @@ Uma aplicação Web internacionalizada construída para decodificar relatórios 
 - **METAR + TAF:** Current weather report and aerodrome forecast decoded side by side, following ICAO Annex 3 and DECEA's ICA 105-16. The METAR card covers CAVOK, wind variation, minimum visibility, RVR, all cloud layers with CB/TCU, recent weather, wind shear and the 2-hour trend. Each TAF period shows its change group and validity as written (e.g. `BECMG 2013/2015`, `PROB30 TEMPO 2018/2022`), plus issue time, validity and max/min temperatures (TX/TN).
 - **NOTAMs in force:** Brazilian aerodromes, from DECEA's official AISWEB API.
 - **Fault isolation:** The three sources are fetched in parallel; if one fails, the others still show.
+- **Data freshness badge:** Each section shows when its data is from (METAR observed at 18:00Z, 25 min ago; TAF issued at; NOTAM fetched at). Yellow warning for a METAR over 1 h old or an expired TAF, red when the source failed.
 - **Automated tests:** pytest suite with sample API responses.
 
 ### 🇧🇷 Português
@@ -43,6 +44,7 @@ Uma aplicação Web internacionalizada construída para decodificar relatórios 
 - **METAR + TAF:** Boletim atual e previsão do aeródromo decodificados lado a lado, seguindo o Anexo 3 da ICAO e a ICA 105-16 do DECEA. O METAR mostra CAVOK, variação do vento, visibilidade mínima, RVR, todas as camadas de nuvens com CB/TCU, tempo recente, cortante do vento e a tendência para 2 horas. Cada período do TAF mostra o grupo de mudança e a validade como estão na mensagem (ex.: `BECMG 2013/2015`, `PROB30 TEMPO 2018/2022`), além de emissão, validade e temperaturas máxima e mínima (TX/TN).
 - **NOTAM em vigor:** Aeródromos brasileiros, pela API oficial do AISWEB/DECEA.
 - **Falhas isoladas:** As três fontes são consultadas em paralelo; se uma cair, as outras continuam aparecendo.
+- **Selo de frescor:** Cada seção mostra de quando é o dado (METAR observado às 18:00Z, há 25 min; TAF emitido às; NOTAM consultado às). Aviso amarelo para METAR com mais de 1 h ou TAF vencido, vermelho quando a fonte falhou.
 - **Testes automatizados:** Suíte pytest com respostas de exemplo das APIs.
 
 ---
