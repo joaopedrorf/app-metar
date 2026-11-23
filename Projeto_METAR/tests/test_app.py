@@ -72,3 +72,46 @@ def test_previa_para_linkedin(cliente):
     assert 'property="og:title"' in html
     assert 'content="https://localhost/static/imagens/previa.png"' in html
     assert cliente.get('/static/imagens/previa.png').status_code == 200
+
+
+# ---------- Selo de frescor ----------
+
+@pytest.fixture
+def relogio(monkeypatch):
+    """Fixa a hora do servidor em 19/10/2026 18:25Z (METAR de exemplo é 191800Z)."""
+    from datetime import datetime, timezone
+    import frescor
+
+    def acertar(dia, hora, minuto):
+        momento = datetime(2026, 10, dia, hora, minuto, tzinfo=timezone.utc)
+        monkeypatch.setattr(frescor, 'agora_utc', lambda: momento)
+
+    acertar(19, 18, 25)
+    return acertar
+
+
+def test_selo_de_frescor_em_cada_secao(cliente, fontes_ok, relogio):
+    html = cliente.post('/', data={"icao": "SBGL", "idioma": "pt"}).get_data(as_text=True)
+    assert "Observado às 18:00Z (há 25 min)" in html
+    assert "Emitido às 16:30Z (há 1 h 55 min)" in html
+    assert "Consultado às 18:25Z" in html
+    assert "selo-velho" not in html
+
+
+def test_selo_avisa_metar_velho_e_taf_vencido(cliente, fontes_ok, relogio):
+    relogio(21, 1, 0)
+    html = cliente.post('/', data={"icao": "SBGL", "idioma": "en"}).get_data(as_text=True)
+    assert "Over 1 h old" in html
+    assert "Validity ended at 00:00Z." in html
+    assert "selo-velho" in html
+
+
+def test_selo_mostra_hora_da_falha(cliente, fontes_ok, relogio, monkeypatch):
+    def notam_fora(icao):
+        raise ErroFonte('conexao')
+
+    monkeypatch.setattr(clientes, 'buscar_notams', notam_fora)
+    html = cliente.post('/', data={"icao": "SBGL", "idioma": "pt"}).get_data(as_text=True)
+    assert "Falhou às 18:25Z" in html
+    # As outras seções continuam com o selo normal
+    assert "Observado às 18:00Z" in html
