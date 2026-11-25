@@ -123,3 +123,13 @@ def test_rodape_com_link_do_linkedin(cliente):
     assert "Fale com o desenvolvedor" in html
     html = cliente.post('/', data={"icao": "", "idioma": "en"}).get_data(as_text=True)
     assert "Contact the developer" in html
+
+
+def test_aerodromo_estrangeiro_nao_mostra_falha_no_notam(cliente, fontes_ok, relogio, monkeypatch):
+    def fora(icao):
+        raise ErroFonte('fora_do_brasil')
+
+    monkeypatch.setattr(clientes, 'buscar_notams', fora)
+    html = cliente.post('/', data={"icao": "KMIA", "idioma": "en"}).get_data(as_text=True)
+    assert "only available for Brazilian aerodromes" in html
+    assert "Failed at" not in html

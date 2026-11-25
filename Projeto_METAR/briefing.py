@@ -11,6 +11,9 @@ import frescor
 from clientes import ErroFonte
 from formatacao import formatar_metar, formatar_notams, formatar_taf
 
+# Erros que não são queda da fonte, só falta de cobertura
+SEM_COBERTURA = {'fora_do_brasil'}
+
 
 def _secao(buscar, formatar, selo, aeroporto, t):
     """Busca e formata uma seção. Devolve {'dados', 'erro', 'selo'}.
@@ -22,7 +25,9 @@ def _secao(buscar, formatar, selo, aeroporto, t):
         bruto = buscar(aeroporto)
     except ErroFonte as e:
         erro = t['erros'].get(e.codigo, t['erros']['indisponivel'])
-        return {"dados": None, "erro": erro, "selo": frescor.selo_falha(frescor.agora_utc(), t)}
+        # Fora da cobertura (ex.: NOTAM de aeródromo estrangeiro) não é falha: sem selo
+        selo_erro = None if e.codigo in SEM_COBERTURA else frescor.selo_falha(frescor.agora_utc(), t)
+        return {"dados": None, "erro": erro, "selo": selo_erro}
     agora = frescor.agora_utc()
     try:
         dados = formatar(bruto)
