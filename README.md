@@ -81,3 +81,7 @@ Sem as chaves do AISWEB o app funciona normalmente, só sem NOTAM. / Without the
 ---
 
 ⚠️ Uso informativo. Não substitui o briefing oficial do DECEA. / For information only. Not a substitute for an official briefing.
+
+---
+
+Desenvolvido por / Built by [João Pedro Rodrigues](https://github.com/joaopedrorf)
