@@ -1,4 +1,4 @@
-# 🌍 Briefing de Aeródromo / Aerodrome Briefing
+# 🌍 Briefing de Aeródromo / Aerodrome Briefing 🌍
 
 A bilingual (English/Portuguese) briefing that shows the METAR, TAF and NOTAMs of an aerodrome on a single screen, in plain language.
 
